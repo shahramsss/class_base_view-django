@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h3>home - {{username}}</h3>
+  <h3>home - {{ username }}</h3>
   {% for car in cars %}
-    {{ car.name }}
+    {% comment %} <a href="{% url 'home:car_detail' car.id %}">{{ car.name }}</a> {% endcomment %}
+    <a href="{% url 'home:car_detail' car.name %}">{{ car.name }}</a>
     <br />
     <br />
   {% endfor %}

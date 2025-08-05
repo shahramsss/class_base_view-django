@@ -7,4 +7,6 @@ urlpatterns = [
     path("hometemplate/", views.HomeTemplateView.as_view(), name="hometemplate"),
     path("two/<str:name>/<int:id>/", views.Two.as_view(), name="two"),
     path("cars/", views.CarListView.as_view(), name="cars"),
+    # path("<int:pk>/", views.CarDetailView.as_view(), name="car_detail"),
+    path("<slug:my_slug>/", views.CarDetailView.as_view(), name="car_detail"),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, RedirectView, ListView
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView
 from .models import Car
 
 
@@ -60,3 +60,11 @@ class CarListView(ListView):
         context = super().get_context_data(**kwargs)
         context["username"] = "sss"
         return context
+
+
+class CarDetailView(DetailView):
+    template_name = "home/detail.html"
+    context_object_name = "car"  # object
+    model = Car
+    slug_url_kwarg = 'my_slug'
+    slug_field = 'name'
