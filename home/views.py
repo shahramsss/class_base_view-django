@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView, RedirectView, ListView
 from .models import Car
 
 
@@ -43,3 +43,20 @@ class Two(RedirectView):
         kwargs.pop("name")
         kwargs.pop("id")
         return super().get_redirect_url(*args, **kwargs)
+
+
+class CarListView(ListView):
+    template_name = "home/home.html"
+    # model = Car # object_list
+    # queryset = Car.objects.filter(year__lte=2022)
+    context_object_name = "cars"
+    # ordering ='-year'
+    # allow_empty = False # if False show 404 , defult= True
+
+    def get_queryset(self):
+        return Car.objects.filter(year__gte=2022)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["username"] = "sss"
+        return context
