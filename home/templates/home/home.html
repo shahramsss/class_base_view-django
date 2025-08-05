@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
   <h3>home</h3>
+  {% for car in cars %}
+    {{ car.name }}
+    <br />
+    <br />
+  {% endfor %}
 {% endblock %}
