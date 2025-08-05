@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import TemplateView
 
 
 class HomeView(View):
-    def post(self, request):
+    # http_method_names = ['post',]
+    def get(self, request):
         return render(request, "home/home.html")
 
     def options(self, request, *args, **kwargs):
@@ -13,4 +15,10 @@ class HomeView(View):
         return response
 
     def http_method_not_allowed(self, request, *args, **kwargs):
-        return render(request ,'method_not_allowd.html')
+        super().http_method_not_allowed(request, *args, **kwargs)
+        return render(request, "method_not_allowd.html")
+
+
+class HomeTemplateView(TemplateView):
+    template_name = "home/home.html"
+    
