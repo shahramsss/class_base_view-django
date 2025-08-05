@@ -47,14 +47,14 @@ class Two(RedirectView):
 
 class CarListView(ListView):
     template_name = "home/home.html"
-    # model = Car # object_list
+    model = Car  # object_list
     # queryset = Car.objects.filter(year__lte=2022)
     context_object_name = "cars"
     # ordering ='-year'
     # allow_empty = False # if False show 404 , defult= True
 
-    def get_queryset(self):
-        return Car.objects.filter(year__gte=2022)
+    # def get_queryset(self):
+    #     return Car.objects.filter(year__gte=2022)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -65,6 +65,17 @@ class CarListView(ListView):
 class CarDetailView(DetailView):
     template_name = "home/detail.html"
     context_object_name = "car"  # object
-    model = Car
-    slug_url_kwarg = 'my_slug'
-    slug_field = 'name'
+    # model = Car
+    # # pk_url_kwarg = "my_id"
+    # slug_url_kwarg = "my_slug"
+    # slug_field = "name"
+    # # queryset = Car.objects.filter(year__lte=2022) # 404
+
+    # # def get_queryset(self): # complex query, 404
+    # #     return Car.objects.filter(year__gte=2022)
+    def get_object(self, queryset=None):
+        return Car.objects.get(
+            name=self.kwargs["name"],
+            owner=self.kwargs["owner"],
+            year=self.kwargs["year"],
+        )
