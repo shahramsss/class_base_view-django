@@ -2,5 +2,8 @@ from django.urls import path
 from . import views
 
 app_name = "home"
-urlpatterns = [path("home/", views.HomeView.as_view(),name='home')]
-urlpatterns = [path("hometemplate/", views.HomeTemplateView.as_view(),name='hometemplate')]
+urlpatterns = [
+    path("home/", views.HomeView.as_view(), name="home"),
+    path("hometemplate/", views.HomeTemplateView.as_view(), name="hometemplate"),
+    path("two/<str:name>/<int:id>/", views.Two.as_view(), name="two"),
+]
