@@ -1,0 +1,107 @@
+CLASS BASE VIEW 
+
+در Django، متدهای `setup()` و `dispatch()` در کلاس‌های ویو (`View`) بخش مهمی از چرخه‌ی پردازش درخواست هستند. اگر می‌خوای ویوهای مبتنی بر کلاس (CBV) رو بهتر درک کنی، دونستن نقش این دو متد بسیار مفیده.
+
+---
+
+## ✅ 1. متد `setup(self, request, *args, **kwargs)`
+
+### 🔹 نقش:
+
+قبل از اجرای هر متد `get()`, `post()`, `put()` و غیره، Django این متد را صدا می‌زند تا:
+
+* درخواست (`request`) را در ویو تنظیم کند.
+* آرگومان‌ها (`args`, `kwargs`) را ست کند.
+
+### 🔹 تعریف پیش‌فرض:
+
+```python
+def setup(self, request, *args, **kwargs):
+    self.request = request
+    self.args = args
+    self.kwargs = kwargs
+```
+
+### 🔹 معمولاً چرا override می‌کنیم؟
+
+برای تنظیم داده‌هایی که می‌خواهیم در تمام متدهای ویو استفاده کنیم.
+
+### ✅ مثال:
+
+```python
+from django.views import View
+
+class MyView(View):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.user = request.user
+        self.is_admin = request.user.is_staff
+
+    def get(self, request, *args, **kwargs):
+        if self.is_admin:
+            return HttpResponse("Welcome admin!")
+        return HttpResponse("Access denied.")
+```
+
+---
+
+## ✅ 2. متد `dispatch(self, request, *args, **kwargs)`
+
+### 🔹 نقش:
+
+در واقع نقطه‌ی ورودی اصلی ویو است. این متد تصمیم می‌گیرد کدام متد (مثلاً `get()`, `post()`, `put()` و ...) را اجرا کند.
+
+### 🔹 تعریف پیش‌فرض:
+
+```python
+def dispatch(self, request, *args, **kwargs):
+    # setup first
+    self.setup(request, *args, **kwargs)
+
+    # then call appropriate method
+    if request.method.lower() == 'get':
+        return self.get(request, *args, **kwargs)
+    elif request.method.lower() == 'post':
+        return self.post(request, *args, **kwargs)
+    ...
+```
+
+### 🔹 معمولاً چرا override می‌کنیم؟
+
+* برای اعمال **middleware محلی** (مثلاً چک کردن دسترسی، لاگ‌گرفتن، ...)
+* برای کدنویسی DRY در تمام درخواست‌ها
+
+### ✅ مثال:
+
+```python
+class MyView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden("You must be logged in.")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("Welcome, authenticated user!")
+```
+
+---
+
+## 🧠 تفاوت کلیدی:
+
+| متد        | نقش                                             |
+| ---------- | ----------------------------------------------- |
+| `setup`    | مقداردهی اولیه (پیش از dispatch)                |
+| `dispatch` | انتخاب متد مناسب (`get`, `post`, ...) برای اجرا |
+
+---
+
+## 🧪 جمع‌بندی استفاده‌ها:
+
+| موقعیت                              | `setup()` | `dispatch()` |
+| ----------------------------------- | --------- | ------------ |
+| ذخیره‌ی user یا object در self      | ✅         | ✅            |
+| بررسی permission                    | ❌         | ✅            |
+| خواندن یا تغییر request             | ❌         | ✅            |
+| شخصی‌سازی رفتار مشترک در تمام متدها | ❌         | ✅            |
+
+---------------------------------------------------------------------------
