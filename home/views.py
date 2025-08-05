@@ -3,7 +3,7 @@ from django.views import View
 
 
 class HomeView(View):
-    def get(self, request):
+    def post(self, request):
         return render(request, "home/home.html")
 
     def options(self, request, *args, **kwargs):
@@ -11,3 +11,6 @@ class HomeView(View):
         response.headers["host"] = "localhost"
         response.headers["user"] = request.user
         return response
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        return render(request ,'method_not_allowd.html')
