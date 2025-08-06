@@ -14,6 +14,7 @@ from .models import Car
 from .froms import CarCreateForm, CarFormSet
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth import views as auth_views
 
 
 class HomeView(View):
@@ -138,3 +139,9 @@ class CarUpdateView(UpdateView):
     success_url = reverse_lazy("home:cars")
     template_name = "home/update.html"
 
+
+class UserLogin(auth_views.LoginView):
+    template_name = "home/login.html"
+
+    def get_success_url(self):
+        return reverse_lazy("home:cars")
