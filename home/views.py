@@ -7,9 +7,10 @@ from django.views.generic import (
     DetailView,
     FormView,
     CreateView,
+    DeleteView,
 )
 from .models import Car
-from .froms import CarCreateForm
+from .froms import CarCreateForm, CarFormSet
 from django.urls import reverse_lazy
 from django.contrib import messages
 
@@ -94,7 +95,7 @@ class CarDetailView(DetailView):
 
 class CarCreateView(FormView):
     template_name = "home/create.html"
-    form_class = CarCreateForm
+    form_class = CarFormSet
     success_url = reverse_lazy("home:cars")
 
     def form_valid(self, form):
@@ -122,3 +123,9 @@ class CarCreateCreateView(CreateView):
         car.save()
         messages.success(self.request, "Car created successfully.")
         return super().form_valid(form)
+
+
+class CarDeleteView(DeleteView):  # id
+    model = Car
+    success_url = reverse_lazy("home:cars")
+    template_name = "home/delete.html"
