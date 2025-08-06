@@ -83,7 +83,7 @@ class CarDetailView(DetailView):
 
     # # def get_queryset(self): # complex query, 404
     # #     return Car.objects.filter(year__gte=2022)
-    
+
     # def get_object(self, queryset=None):
     #     return Car.objects.get(
     #         name=self.kwargs["name"],
@@ -112,10 +112,13 @@ class CarCreateCreateView(CreateView):
     template_name = "home/create.html"
     success_url = reverse_lazy("home:cars")
 
-    def form_invalid(self, form):
+    def form_valid(self, form):
         car = form.save(commit=False)
-        car.owner = self.request.user.username if self.request.user else "nothing"
+        car.owner = (
+            self.request.user.username
+            if self.request.user.is_authenticated
+            else "nothing"
+        )
         car.save()
-        messages.success(self.request, "create car successfully", "success")
-
-        return super().form_invalid(form)
+        messages.success(self.request, "Car created successfully.")
+        return super().form_valid(form)
