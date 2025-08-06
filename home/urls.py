@@ -19,4 +19,6 @@ urlpatterns = [
     path("delete/<int:pk>/", views.CarDeleteView.as_view(), name="car_delete"),
     path("update/<int:pk>/", views.CarUpdateView.as_view(), name="car_update"),
     path("login/", views.UserLogin.as_view(), name="login"),
+    path("logout/", views.UserLogout.as_view(), name="logout"),
+    path("<int:year>/<int:month>/", views.CarMonth.as_view()),
 ]

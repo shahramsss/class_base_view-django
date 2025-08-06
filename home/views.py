@@ -9,6 +9,7 @@ from django.views.generic import (
     CreateView,
     DeleteView,
     UpdateView,
+    MonthArchiveView,
 )
 from .models import Car
 from .froms import CarCreateForm, CarFormSet
@@ -142,6 +143,19 @@ class CarUpdateView(UpdateView):
 
 class UserLogin(auth_views.LoginView):
     template_name = "home/login.html"
+    # next_page = reverse_lazy("home:cars")
 
     def get_success_url(self):
         return reverse_lazy("home:cars")
+
+
+class UserLogout(auth_views.LogoutView):
+    next_page = reverse_lazy("home:cars")
+
+
+class CarMonth(MonthArchiveView):
+    model = Car
+    date_field = "created"
+    template_name = "home/home.html"
+    context_object_name = "cars"
+    month_format = "%m"
