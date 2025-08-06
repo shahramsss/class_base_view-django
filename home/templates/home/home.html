@@ -3,6 +3,7 @@
   <h3>home - {{ username }}</h3>
   {% for car in cars %}
     <a class="btn btn-info" href="{% url 'home:car_detail' car.id %}">{{ car.name }}</a>
+    <a class="btn btn-warning" href="{% url 'home:car_update' car.id %}">update</a>
     <a class="btn btn-danger" href="{% url 'home:car_delete' car.id %}">delete</a>
     {% comment %} <a href="{% url 'home:car_detail' car.name car.owner car.year %}">{{ car.name }}</a> {% endcomment %}
     <br />

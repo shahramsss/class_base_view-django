@@ -8,6 +8,7 @@ from django.views.generic import (
     FormView,
     CreateView,
     DeleteView,
+    UpdateView,
 )
 from .models import Car
 from .froms import CarCreateForm, CarFormSet
@@ -129,3 +130,11 @@ class CarDeleteView(DeleteView):  # id
     model = Car
     success_url = reverse_lazy("home:cars")
     template_name = "home/delete.html"
+
+
+class CarUpdateView(UpdateView):
+    model = Car
+    fields = ["name", "year"]
+    success_url = reverse_lazy("home:cars")
+    template_name = "home/update.html"
+
