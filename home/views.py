@@ -1,7 +1,17 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, RedirectView, ListView, DetailView
+from django.views.generic import (
+    TemplateView,
+    RedirectView,
+    ListView,
+    DetailView,
+    FormView,
+    CreateView,
+)
 from .models import Car
+from .froms import CarCreateForm
+from django.urls import reverse_lazy
+from django.contrib import messages
 
 
 class HomeView(View):
@@ -65,17 +75,47 @@ class CarListView(ListView):
 class CarDetailView(DetailView):
     template_name = "home/detail.html"
     context_object_name = "car"  # object
-    # model = Car
-    # # pk_url_kwarg = "my_id"
+    model = Car
+    # pk_url_kwarg = "my_id"
     # slug_url_kwarg = "my_slug"
     # slug_field = "name"
     # # queryset = Car.objects.filter(year__lte=2022) # 404
 
     # # def get_queryset(self): # complex query, 404
     # #     return Car.objects.filter(year__gte=2022)
-    def get_object(self, queryset=None):
-        return Car.objects.get(
-            name=self.kwargs["name"],
-            owner=self.kwargs["owner"],
-            year=self.kwargs["year"],
-        )
+    
+    # def get_object(self, queryset=None):
+    #     return Car.objects.get(
+    #         name=self.kwargs["name"],
+    #         owner=self.kwargs["owner"],
+    #         year=self.kwargs["year"],
+    #     )
+
+
+class CarCreateView(FormView):
+    template_name = "home/create.html"
+    form_class = CarCreateForm
+    success_url = reverse_lazy("home:cars")
+
+    def form_valid(self, form):
+        self._cre_create(form.cleaned_data)
+        messages.success(self.request, "create car successfully", "success")
+        return super().form_valid(form)
+
+    def _cre_create(self, data):
+        Car.objects.create(name=data["name"], year=data["year"], owner=data["owner"])
+
+
+class CarCreateCreateView(CreateView):
+    model = Car
+    fields = ["name", "year"]
+    template_name = "home/create.html"
+    success_url = reverse_lazy("home:cars")
+
+    def form_invalid(self, form):
+        car = form.save(commit=False)
+        car.owner = self.request.user.username if self.request.user else "nothing"
+        car.save()
+        messages.success(self.request, "create car successfully", "success")
+
+        return super().form_invalid(form)
