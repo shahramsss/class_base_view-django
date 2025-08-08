@@ -21,4 +21,6 @@ urlpatterns = [
     path("login/", views.UserLogin.as_view(), name="login"),
     path("logout/", views.UserLogout.as_view(), name="logout"),
     path("<int:year>/<int:month>/", views.CarMonth.as_view()),
+    path("carlistapi/", views.CarListAPI.as_view()),
+
 ]

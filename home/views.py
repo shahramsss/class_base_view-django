@@ -16,6 +16,8 @@ from .froms import CarCreateForm, CarFormSet
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
+from rest_framework.generics import ListAPIView
+from .serializers import CarSerializr
 
 
 class HomeView(View):
@@ -159,3 +161,8 @@ class CarMonth(MonthArchiveView):
     template_name = "home/home.html"
     context_object_name = "cars"
     month_format = "%m"
+
+
+class CarListAPI(ListAPIView):
+    serializer_class = CarSerializr
+    queryset = Car.objects.all()
