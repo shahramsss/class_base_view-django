@@ -23,5 +23,6 @@ urlpatterns = [
     path("<int:year>/<int:month>/", views.CarMonth.as_view()),
     path("carlistapi/", views.CarListAPI.as_view()),
     path("carlistapi/<str:name>/", views.CarSingleAPI.as_view()),
+    path("cardeleteapi/<str:str_name>/", views.CarDeleteAPI.as_view()),
 
 ]
