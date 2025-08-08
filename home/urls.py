@@ -22,5 +22,6 @@ urlpatterns = [
     path("logout/", views.UserLogout.as_view(), name="logout"),
     path("<int:year>/<int:month>/", views.CarMonth.as_view()),
     path("carlistapi/", views.CarListAPI.as_view()),
+    path("carlistapi/<str:name>/", views.CarSingleAPI.as_view()),
 
 ]
