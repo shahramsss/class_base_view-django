@@ -24,5 +24,6 @@ urlpatterns = [
     path("carlistapi/", views.CarListAPI.as_view()),
     path("carlistapi/<str:name>/", views.CarSingleAPI.as_view()),
     path("cardeleteapi/<str:str_name>/", views.CarDeleteAPI.as_view()),
+    path("createapi/", views.CarCreateAPI.as_view()),
 
 ]
