@@ -204,6 +204,14 @@ class CarGenericAPI(RetrieveModelMixin, DestroyModelMixin, GenericAPIView):
     serializer_class = CarSerializr
     queryset = Car.objects.all()
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.name == 'audi':
+            return Response("Sorry ....")
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+        return super().retrieve(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
