@@ -21,9 +21,10 @@ urlpatterns = [
     path("login/", views.UserLogin.as_view(), name="login"),
     path("logout/", views.UserLogout.as_view(), name="logout"),
     path("<int:year>/<int:month>/", views.CarMonth.as_view()),
+    # API
     path("carlistapi/", views.CarListAPI.as_view()),
     path("carlistapi/<str:name>/", views.CarSingleAPI.as_view()),
     path("cardeleteapi/<str:str_name>/", views.CarDeleteAPI.as_view()),
     path("createapi/", views.CarCreateAPI.as_view()),
-
+    path("updateapi/<int:pk>/", views.CarUpdateAPI.as_view()),
 ]
