@@ -22,8 +22,10 @@ from rest_framework.generics import (
     DestroyAPIView,
     CreateAPIView,
     UpdateAPIView,
+    GenericAPIView,
 )
 from .serializers import CarSerializr
+from rest_framework.response import Response
 
 
 class HomeView(View):
@@ -191,6 +193,17 @@ class CarCreateAPI(CreateAPIView):
     serializer_class = CarSerializr
     queryset = Car.objects.all()
 
-class CarUpdateAPI(UpdateAPIView): # put all fileds, patch partial fields 
+
+class CarUpdateAPI(UpdateAPIView):  # put all fileds, patch partial fields
     serializer_class = CarSerializr
     queryset = Car.objects.all()
+
+
+class CarGenericAPI(GenericAPIView):
+    serializer_class = CarSerializr
+    queryset = Car.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        ser_data = self.get_serializer(instance=instance).data
+        return Response(data=ser_data)

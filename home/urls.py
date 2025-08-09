@@ -27,4 +27,5 @@ urlpatterns = [
     path("cardeleteapi/<str:str_name>/", views.CarDeleteAPI.as_view()),
     path("createapi/", views.CarCreateAPI.as_view()),
     path("updateapi/<int:pk>/", views.CarUpdateAPI.as_view()),
+    path("genericapi/<int:pk>/", views.CarGenericAPI.as_view()),
 ]
