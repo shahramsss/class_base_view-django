@@ -26,6 +26,7 @@ from rest_framework.generics import (
 )
 from .serializers import CarSerializr
 from rest_framework.response import Response
+from rest_framework.mixins import RetrieveModelMixin
 
 
 class HomeView(View):
@@ -199,11 +200,13 @@ class CarUpdateAPI(UpdateAPIView):  # put all fileds, patch partial fields
     queryset = Car.objects.all()
 
 
-class CarGenericAPI(GenericAPIView):
+class CarGenericAPI(RetrieveModelMixin, GenericAPIView):
     serializer_class = CarSerializr
     queryset = Car.objects.all()
 
     def get(self, request, *args, **kwargs):
-        instance = self.get_object()
-        ser_data = self.get_serializer(instance=instance).data
-        return Response(data=ser_data)
+        return self.retrieve(request, *args, **kwargs)
+        
+        # instance = self.get_object()
+        # ser_data = self.get_serializer(instance=instance).data
+        # return Response(data=ser_data)
